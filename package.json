@@ -4,7 +4,8 @@
   "description": "Home server mainly for sharing files",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index",
+    "dev": "nodemon index"
   },
   "repository": {
     "type": "git",
@@ -15,5 +16,13 @@
   "bugs": {
     "url": "https://github.com/haotongwang/home-server/issues"
   },
-  "homepage": "https://github.com/haotongwang/home-server#readme"
+  "homepage": "https://github.com/haotongwang/home-server#readme",
+  "dependencies": {
+    "uuid": "^3.3.3"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-google": "^0.14.0",
+    "nodemon": "^2.0.2"
+  }
 }

@@ -1,0 +1,27 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true
+    },
+    "extends": [
+        "google"
+    ],
+    "globals": {
+        "Atomics": "readonly",
+        "SharedArrayBuffer": "readonly"
+    },
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module"
+    },
+    "rules": {
+        "linebreak-style": 0,
+        "no-tabs": 0,
+        "indent": ["error", "tab", { "SwitchCase": 1 }],
+        "object-curly-spacing": ["error", "always"],
+        "object-curly-newline": "off",
+        "quotes": "off",
+        "comma-dangle": "off"
+    }
+}
