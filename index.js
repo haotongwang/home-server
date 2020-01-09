@@ -1,3 +1,5 @@
+'use strict';
+
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -10,12 +12,18 @@ const server = http.createServer((req, res) => {
 	if (filePath == './') {
 		filePath = './index.html';
 	} else if (path.extname(req.url) === '') {
-		filePath = filePath.trimRight('/') + '.html';
+		const [folder] = filePath.match('[^\\/]+(?=\\/$)|[^\\/]+$');
+		filePath = path.join(filePath, folder + '.html');
 	}
 
+	console.log(filePath);
+
 	const extname = path.extname(filePath);
-	let contentType = 'text/html';
+	let contentType = 'document';
 	switch (extname) {
+		case '.html':
+			contentType = 'text/html';
+			break;
 		case '.txt':
 			contentType = 'text/plain';
 			break;
@@ -36,6 +44,9 @@ const server = http.createServer((req, res) => {
 			break;
 		case '.wav':
 			contentType = 'audio/wav';
+			break;
+		case '.pdf':
+			contentType = 'application/pdf';
 			break;
 	}
 
