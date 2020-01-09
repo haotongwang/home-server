@@ -8,7 +8,7 @@ const readline = require('readline');
 const PORT = process.env.PORT || 5000;
 
 const server = http.createServer((req, res) => {
-	let filePath = '.' + req.url;
+	let filePath = '.' + decodeURI(req.url);
 	if (filePath == './') {
 		filePath = './index.html';
 	} else if (path.extname(req.url) === '') {
@@ -48,9 +48,12 @@ const server = http.createServer((req, res) => {
 		case '.pdf':
 			contentType = 'application/pdf';
 			break;
+		case '.mp4':
+			contentType = 'video/mp4';
+			break;
 	}
 
-	fs.readFile(filePath, 'utf8', function(err, data) {
+	fs.readFile(filePath, function(err, data) {
 		if (err) {
 			if (err.code == 'ENOENT') {
 				fs.readFile('./404.html', function(err, data) {
@@ -63,7 +66,7 @@ const server = http.createServer((req, res) => {
 			}
 		} else {
 			res.writeHead(200, { 'Content-Type': contentType });
-			res.end(data, 'utf-8');
+			res.end(data);
 		}
 	});
 }).listen(PORT, () => console.log(`Server running on port ${PORT}`));
