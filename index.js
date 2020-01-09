@@ -5,6 +5,8 @@ const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
 
+/* --------------------------------- server --------------------------------- */
+
 const PORT = process.env.PORT || 5000;
 
 const server = http.createServer((req, res) => {
@@ -70,6 +72,8 @@ const server = http.createServer((req, res) => {
 		}
 	});
 }).listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+/* -------------------------------- terminal -------------------------------- */
 
 const rl = readline.createInterface({
 	input: process.stdin,
