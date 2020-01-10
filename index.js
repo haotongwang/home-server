@@ -7,6 +7,8 @@ const express = require('express');
 
 const app = express();
 
+const staticDirectories = ['file'];
+
 /* ------------------------------- functions ------------------------------- */
 
 /**
@@ -20,9 +22,13 @@ function setStatic(dirName) {
 	});
 }
 
-/* ------------------------------ static files ------------------------------ */
+/* --------------------------------- routes --------------------------------- */
 
-setStatic('file');
+staticDirectories.forEach((dir) => setStatic(dir));
+
+app.get(['/', '/index.html'], (req, res) => {
+	res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 /* ---------------------------------- 404 ---------------------------------- */
 
