@@ -8,26 +8,27 @@ const express = require('express');
 const app = express();
 
 const staticDirectories = ['file'];
+const { document } = new JSDOM(fs.readFileSync(path.join(__dirname, 'index.html'))).window;
 
 /* ------------------------------- functions ------------------------------- */
 
-/**
- * Set a directory to serve static files
- * @param {String} dirName Name of directory
- */
-function setStatic(dirName) {
-	app.use(`/${dirName}`, express.static(dirName));
-	app.get(`/${dirName}`, (req, res) => {
-		res.sendFile(path.join(__dirname, dirName, `${dirName}.html`));
-	});
-}
+
+/* ---------------------------------- code ---------------------------------- */
+
+const ul = document.createElement('ul');
+document.body.appendChild(ul);
+
+staticDirectories.forEach((dir) => {
+	app.use(`/${dir}`, express.static(dir));
+	const li = document.createElement('li');
+	li.innerHTML = `<a href="${dir}/${dir}.html">${dir}</a>`;
+	ul.appendChild(li);
+});
 
 /* --------------------------------- routes --------------------------------- */
 
-staticDirectories.forEach((dir) => setStatic(dir));
-
 app.get(['/', '/index.html'], (req, res) => {
-	res.sendFile(path.join(__dirname, 'index.html'));
+	res.send(document.documentElement.outerHTML);
 });
 
 /* ---------------------------------- 404 ---------------------------------- */
