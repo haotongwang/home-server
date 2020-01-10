@@ -7,6 +7,13 @@ const express = require('express');
 
 const app = express();
 
+const serveDirectory = fs.existsSync(process.argv[2])
+	&& fs.statSync(process.argv[2]).isDirectory()
+	? process.argv[2]
+	: (() => {
+		process.argv[2] && console.log(`Invalid path: ${process.argv[2]}`);
+		return path.join(__dirname, 'public');
+	})();
 /* ------------------------------- functions ------------------------------- */
 
 /**
@@ -37,12 +44,14 @@ function generateHTML(dirPath, title=null) {
 	return document.documentElement.outerHTML;
 }
 
-/* ---------------------------------- code ---------------------------------- */
+/* --------------------------------- routes --------------------------------- */
 
+// home page
 app.get(['/', '/index.html'], (req, res) => {
 	res.send(generateHTML(path.join(__dirname, 'public'), 'Home Server'));
 });
 
+// generalised page generation
 app.get('*', (req, res, next) => {
 	const abs = path.join(__dirname, 'public', req.url);
 	if (fs.existsSync(abs)) {
@@ -56,12 +65,10 @@ app.get('*', (req, res, next) => {
 	}
 });
 
-/* --------------------------------- routes --------------------------------- */
+// static files
+app.use(express.static(serveDirectory));
 
-app.use(express.static('public'));
-
-/* ---------------------------------- 404 ---------------------------------- */
-
+// 404
 app.use((req, res) => {
 	res.status(404).sendFile(path.join(__dirname, '404.html'));
 });
