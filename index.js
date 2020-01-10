@@ -7,29 +7,46 @@ const express = require('express');
 
 const app = express();
 
-const staticDirectories = ['file'];
-const { document } = new JSDOM(fs.readFileSync(path.join(__dirname, 'index.html'))).window;
 
 /* ------------------------------- functions ------------------------------- */
 
+/**
+ * Generate a stringified HTML file listing the contents of the directory
+ * @param {String} dirPath Path to directory
+ * @param {String} title Title of page
+ * @return {String} Stringified HTML
+ */
+function generateHTML(dirPath, title=null) {
+	title = title || path.basename(dirPath);
+
+	const { document } = new JSDOM().window;
+	document.title = title;
+
+	const h1 = document.createElement('h1');
+	h1.innerText = title;
+	document.body.appendChild(h1);
+
+	const ul = document.createElement('ul');
+	document.body.appendChild(ul);
+
+	fs.readdirSync(dirPath).forEach((dir) => {
+		const li = document.createElement('li');
+		li.innerHTML = `<a href="${dir}">${dir}</a>`;
+		ul.appendChild(li);
+	});
+
+	return document.documentElement.outerHTML;
+}
 
 /* ---------------------------------- code ---------------------------------- */
 
-const ul = document.createElement('ul');
-document.body.appendChild(ul);
-
-staticDirectories.forEach((dir) => {
-	app.use(`/${dir}`, express.static(dir));
-	const li = document.createElement('li');
-	li.innerHTML = `<a href="${dir}/${dir}.html">${dir}</a>`;
-	ul.appendChild(li);
+app.get(['/', '/index.html'], (req, res) => {
+	res.send(generateHTML(path.join(__dirname, 'public'), 'Home Server'));
 });
 
 /* --------------------------------- routes --------------------------------- */
 
-app.get(['/', '/index.html'], (req, res) => {
-	res.send(document.documentElement.outerHTML);
-});
+app.use(express.static('public'));
 
 /* ---------------------------------- 404 ---------------------------------- */
 
