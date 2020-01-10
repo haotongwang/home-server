@@ -7,7 +7,6 @@ const express = require('express');
 
 const app = express();
 
-
 /* ------------------------------- functions ------------------------------- */
 
 /**
@@ -29,9 +28,9 @@ function generateHTML(dirPath, title=null) {
 	const ul = document.createElement('ul');
 	document.body.appendChild(ul);
 
-	fs.readdirSync(dirPath).forEach((dir) => {
+	fs.readdirSync(dirPath).forEach((d) => {
 		const li = document.createElement('li');
-		li.innerHTML = `<a href="${dir}">${dir}</a>`;
+		li.innerHTML = `<a href="${d}">${d}</a>`;
 		ul.appendChild(li);
 	});
 
@@ -42,6 +41,19 @@ function generateHTML(dirPath, title=null) {
 
 app.get(['/', '/index.html'], (req, res) => {
 	res.send(generateHTML(path.join(__dirname, 'public'), 'Home Server'));
+});
+
+app.get('*', (req, res, next) => {
+	const abs = path.join(__dirname, 'public', req.url);
+	if (fs.existsSync(abs)) {
+		if (fs.statSync(abs).isDirectory()) {
+			res.send(generateHTML(abs));
+		} else {
+			res.sendFile(abs);
+		}
+	} else {
+		next();
+	}
 });
 
 /* --------------------------------- routes --------------------------------- */
