@@ -1,11 +1,12 @@
 'use strict';
 
+const util = require('util'); // eslint-disable-line no-unused-vars
 const fs = require('fs');
 const path = require('path');
 const { JSDOM } = require('jsdom');
 const express = require('express');
 const Formidable = require('formidable');
-const util = require('util');
+const url = require('url');
 
 const app = express();
 
@@ -31,7 +32,7 @@ function generateHTML(dirPath, title=null) {
 	document.title = title;
 
 	const h1 = document.createElement('h1');
-	h1.innerText = title;
+	h1.innerHTML = title;
 	document.body.appendChild(h1);
 
 	const ul = document.createElement('ul');
@@ -54,7 +55,7 @@ function generateHTML(dirPath, title=null) {
 
 // home page
 app.get(['/', '/index.html'], (req, res) => {
-	res.send(generateHTML(path.join(__dirname, 'public'), 'Home Server'));
+	res.send(generateHTML(path.join(__dirname, serveDirectory), 'Home Server'));
 });
 
 // upload page
@@ -71,19 +72,25 @@ app.post('/upload', (req, res) => {
 
 	form.parse(req, (err, fields, files) => {
 		if (err) console.error(err);
-		const { upload } = files;
+		if (files.upload.length > 0) {
+			const { upload } = files;
 
-		upload.forEach((file) => {
-			fs.renameSync(file.path, path.join(path.dirname(file.path), file.name));
-		});
+			const fileDir = path.basename(req.get('referer')) === `localhost:${PORT}` || path.basename(req.get('referer')) === 'index.html'
+				? serveDirectory
+				: path.join(serveDirectory, url.parse(req.get('referer')).pathname);
 
-		res.end(util.inspect(req));
+			upload.forEach((file) => {
+				fs.renameSync(file.path, path.join(fileDir, file.name));
+			});
+		}
+
+		res.redirect(req.get('referer'));
 	});
 });
 
 // generalised page generation
 app.get('*', (req, res, next) => {
-	const abs = path.join(__dirname, 'public', req.url);
+	const abs = path.join(serveDirectory, req.url);
 	if (fs.existsSync(abs) && fs.statSync(abs).isDirectory()) {
 		res.send(generateHTML(abs));
 	} else {
