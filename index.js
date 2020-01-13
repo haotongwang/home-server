@@ -7,16 +7,45 @@ const { JSDOM } = require('jsdom');
 const express = require('express');
 const Formidable = require('formidable');
 const url = require('url');
+const yargs = require('yargs');
 
 const app = express();
 
-const serveDirectory = fs.existsSync(process.argv[2])
-	&& fs.statSync(process.argv[2]).isDirectory()
-	? process.argv[2]
+const args = yargs
+	.options({
+		'p': {
+			alias: ['P', '-port', '-PORT'],
+			default: -1,
+			describe: 'port of server',
+			type: 'number'
+		},
+		'd': {
+			alias: ['-path', '-dir'],
+			default: path.join(__dirname, 'public'),
+			describe: 'path to directory for serving static files',
+			type: 'string'
+		},
+		'r': {
+			alias: ['-run'],
+			default: false,
+			describe: 'server running in mode run or dev',
+			type: 'boolean'
+		}
+	})
+	.help()
+	.argv;
+
+const serveDirectory = fs.statSync(args['dir']).isDirectory()
+	? args['dir']
 	: (() => {
-		process.argv[2] && console.log(`Invalid path: ${process.argv[2]}`);
+		console.log(`Invalid path: ${args['dir']}`);
 		return path.join(__dirname, 'public');
 	})();
+
+const PORT = args['port'] >= 0
+	? args['port']
+	: args['run'] ? 8080 : 5000; // 5000 dev, 8080 run
+
 /* ------------------------------- functions ------------------------------- */
 
 /**
@@ -107,7 +136,5 @@ app.use((req, res) => {
 });
 
 /* --------------------------------- server --------------------------------- */
-
-const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}...`));
