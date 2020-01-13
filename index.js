@@ -46,6 +46,8 @@ const PORT = args['port'] >= 0
 	? args['port']
 	: args['run'] ? 8080 : 5000; // 5000 dev, 8080 run
 
+let redirectUrl = '';
+
 /* ------------------------------- functions ------------------------------- */
 
 /**
@@ -84,7 +86,7 @@ function generateHTML(dirPath, title=null) {
 
 // home page
 app.get(['/', '/index.html'], (req, res) => {
-	res.send(generateHTML(path.join(__dirname, serveDirectory), 'Home Server'));
+	res.send(generateHTML(serveDirectory, 'Home Server'));
 });
 
 // upload page
@@ -115,6 +117,22 @@ app.post('/upload', (req, res) => {
 
 		res.redirect(req.get('referer'));
 	});
+});
+
+// redirect
+app.get('/redirect', (req, res) => {
+	redirectUrl ? res.redirect(redirectUrl) : res.send('<h1>No redirect set</h1>');
+});
+
+// set
+app.get('/set', (req, res) => {
+	if (req.query) {
+		redirectUrl = req.query['redirect'];
+		res.end(`<h1>redirect set to ${redirectUrl}</h1>`);
+	} else {
+		// set page
+		res.status(501).sendFile(path.join(__dirname, '501.html'));
+	}
 });
 
 // generalised page generation
