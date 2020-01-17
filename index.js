@@ -8,6 +8,7 @@ const express = require('express');
 const Formidable = require('formidable');
 const url = require('url');
 const yargs = require('yargs');
+const clip = require('clipboardy');
 
 const app = express();
 
@@ -95,7 +96,6 @@ app.get('/upload.html', (req, res) => {
 // upload POST method
 app.post('/upload', (req, res) => {
 	const form = new Formidable();
-	form.uploadDir = path.join(__dirname, 'temp');
 	form.keepExtensions = true;
 	form.multiples = true;
 
@@ -132,6 +132,39 @@ app.get('/set', (req, res) => {
 	} else {
 		// set page
 		res.status(501).sendFile(path.join(__dirname, '501.html'));
+	}
+});
+app.get('/set/:setting', (req, res) => {
+	const { setting } = req.params;
+	const { document } = new JSDOM().window;
+	document.title = setting;
+	document.body.innerHTML = `<form action="/set/${setting}"enctype="multipart/form-data"method="POST"><input type="text"name="url"><input type="submit"value="Upload"></form><br><form action="/set/${setting}?fromClip=true"method="POST"><input type="submit"value="Upload clipboard"></form>`;
+	res.end(document.documentElement.outerHTML);
+});
+app.post('/set/:setting', (req, res) => {
+	const { setting } = req.params;
+	const { document } = new JSDOM().window;
+	document.title = setting;
+	if (req.query['fromClip']) {
+		clip.read()
+			.then((value) => {
+				app.set(setting, value);
+				document.body.innerHTML = `<h1>${setting} set to ${app.get(setting)}</h1>`;
+				res.end(document.documentElement.outerHTML);
+			})
+			.catch((e) => {
+				console.log(e);
+			});
+	} else {
+		const form = new Formidable();
+		form.keepExtensions = true;
+		form.multiples = true;
+
+		form.parse(req, (err, fields) => {
+			app.set(setting, fields.url);
+			document.body.innerHTML = `<h1>${setting} set to ${app.get(setting)}</h1>`;
+			res.end(document.documentElement.outerHTML);
+		});
 	}
 });
 
