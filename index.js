@@ -101,8 +101,11 @@ app.post('/upload', (req, res) => {
 
 	form.parse(req, (err, fields, files) => {
 		if (err) console.error(err);
-		if (files.upload.length > 0) {
-			const { upload } = files;
+		console.log(files.upload);
+		if (files.upload) {
+			const upload = files.upload instanceof Array
+				? files.upload
+				: [files.upload];
 
 			const fileDir = path.basename(req.get('referer')) === `localhost:${PORT}` || path.basename(req.get('referer')) === 'index.html'
 				? serveDirectory
