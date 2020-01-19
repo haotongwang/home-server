@@ -24,6 +24,7 @@
         "quotes": "off",
         "comma-dangle": "off",
         "max-len": "off",
-        "operator-linebreak": ["error", "before"]
+        "operator-linebreak": ["error", "before"],
+        "no-undef": ["error", { "typeof": true }]
     }
 }
