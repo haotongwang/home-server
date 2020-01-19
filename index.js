@@ -6,9 +6,8 @@ const path = require('path');
 const { JSDOM } = require('jsdom');
 const express = require('express');
 const Formidable = require('formidable');
-const url = require('url');
+// const url = require('url');
 const yargs = require('yargs');
-const clip = require('clipboardy');
 
 const app = express();
 
