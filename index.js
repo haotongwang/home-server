@@ -75,7 +75,7 @@ function generateHTML(dirPath, title=null) {
 	});
 
 	const div = document.createElement('div');
-	div.innerHTML=`<form action="/upload"enctype="multipart/form-data"method="POST"><input type="file"name="upload"multiple="multiple"><input type="submit"value="Upload"></form>`;
+	div.innerHTML = `<form action="/upload"enctype="multipart/form-data"method="POST"><input type="file"name="upload"multiple="multiple"oninput="if(this.value)submit.disabled=false;else submit.disabled=true;"><input type="submit"value="Upload"id="submit"disabled></form>`;
 	document.body.appendChild(div);
 
 	return document.documentElement.outerHTML;
