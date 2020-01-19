@@ -8,6 +8,8 @@
 
 * make a function that generates the html string that wraps the content
 
+* use async functions when possible
+
 ## ideas
 
 * ui for redirect
