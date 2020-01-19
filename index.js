@@ -100,7 +100,7 @@ app.get('/redirect', (req, res) => {
 
 // set
 app.get('/set', (req, res) => {
-	if (req.query) {
+	if (Object.keys(req.query).length > 0) {
 		app.set('redirect', req.query['redirect']);
 		res.end(`<h1>redirect set to ${app.get('redirect')}</h1>`);
 	} else {
