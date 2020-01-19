@@ -92,33 +92,6 @@ app.get(['/', '/index.html'], (req, res) => {
 
 app.use(require('./routes/server_actions')({ PORT, serveDirectory }));
 
-// upload POST method
-app.post('/upload', (req, res) => {
-	const form = new Formidable();
-	form.keepExtensions = true;
-	form.multiples = true;
-
-	form.parse(req, (err, fields, files) => {
-		if (err) console.error(err);
-		console.log(files.upload);
-		if (files.upload) {
-			const upload = files.upload instanceof Array
-				? files.upload
-				: [files.upload];
-
-			const fileDir = path.basename(req.get('referer')) === `localhost:${PORT}` || path.basename(req.get('referer')) === 'index.html'
-				? serveDirectory
-				: path.join(serveDirectory, url.parse(req.get('referer')).pathname);
-
-			upload.forEach((file) => {
-				fs.renameSync(file.path, path.join(fileDir, file.name));
-			});
-		}
-
-		res.redirect(req.get('referer'));
-	});
-});
-
 // redirect
 app.get('/redirect', (req, res) => {
 	typeof app.get('redirect') === 'string' && app.get('redirect')
