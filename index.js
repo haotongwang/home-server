@@ -112,8 +112,8 @@ app.get('/set/:setting', (req, res) => {
 	const { setting } = req.params;
 	const { document } = new JSDOM().window;
 	document.title = setting;
-	document.body.innerHTML = `<form action="/set/${setting}"enctype="multipart/form-data"method="POST"><input type="text"name="url"id="url"><input type="submit"value="Upload"id="submit"></form>`;
-	res.end(document.documentElement.outerHTML);
+	document.body.innerHTML = `<form action="/set/${setting}"enctype="multipart/form-data"method="POST"><input type="text"name="value"id="value"><input type="submit"value="Upload"id="submit"></form>`;
+	res.send(document.documentElement.outerHTML);
 });
 app.post('/set/:setting', (req, res) => {
 	const { setting } = req.params;
@@ -124,9 +124,7 @@ app.post('/set/:setting', (req, res) => {
 	form.multiples = true;
 
 	form.parse(req, (err, fields) => {
-		app.set(setting, fields.url);
-		document.body.innerHTML = `<h1>${setting} set to ${app.get(setting)}</h1>`;
-		res.end(document.documentElement.outerHTML);
+		res.redirect(`/set?${setting}=${fields.value}`);
 	});
 });
 
