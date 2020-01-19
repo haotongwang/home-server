@@ -101,8 +101,13 @@ app.get('/redirect', (req, res) => {
 // set
 app.get('/set', (req, res) => {
 	if (Object.keys(req.query).length > 0) {
-		app.set('redirect', req.query['redirect']);
-		res.end(`<h1>redirect set to ${app.get('redirect')}</h1>`);
+		for (const setting in req.query) {
+			if (req.query.hasOwnProperty(setting)) {
+				const value = req.query[setting];
+				app.set(setting, value);
+				res.end(`<h1>${setting} set to ${value}</h1>`);
+			}
+		}
 	} else {
 		// set page
 		res.status(501).sendFile(path.join(__dirname, '501.html'));
