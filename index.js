@@ -81,17 +81,16 @@ function generateHTML(dirPath, title=null) {
 	return document.documentElement.outerHTML;
 }
 
-/* --------------------------------- routes --------------------------------- */
+/* ------------------------------ core routes ------------------------------ */
 
 // home page
 app.get(['/', '/index.html'], (req, res) => {
 	res.send(generateHTML(serveDirectory, 'Home Server'));
 });
 
-// upload page
-app.get('/upload.html', (req, res) => {
-	res.sendFile(path.join(__dirname, 'upload.html'));
-});
+/* ----------------------------- import routes ----------------------------- */
+
+app.use(require('./routes/server_actions')({ PORT, serveDirectory }));
 
 // upload POST method
 app.post('/upload', (req, res) => {
@@ -158,6 +157,8 @@ app.post('/set/:setting', (req, res) => {
 		res.end(document.documentElement.outerHTML);
 	});
 });
+
+/* ------------------------------ catch routes ------------------------------ */
 
 // generalised page generation
 app.get('*', (req, res, next) => {
