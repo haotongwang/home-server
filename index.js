@@ -92,4 +92,4 @@ app.use((req, res) => {
 
 /* --------------------------------- server --------------------------------- */
 
-app.listen(global.PORT, () => console.log(`Server started on global.PORT ${global.PORT}...`));
+app.listen(global.PORT, () => console.log(`Server started on port ${global.PORT}...`));
