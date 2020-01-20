@@ -123,8 +123,6 @@ app.route('/set/:setting')
 	})
 	.post((req, res) => {
 		const { setting } = req.params;
-		const { document } = new JSDOM().window;
-		document.title = setting;
 		const form = new Formidable();
 		form.keepExtensions = true;
 		form.multiples = true;
