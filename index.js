@@ -113,25 +113,26 @@ app.get('/set', (req, res) => {
 		res.status(501).sendFile(path.join(__dirname, '501.html'));
 	}
 });
-app.get('/set/:setting', (req, res) => {
-	const { setting } = req.params;
-	const { document } = new JSDOM().window;
-	document.title = setting;
-	document.body.innerHTML = `<form action="/set/${setting}"enctype="multipart/form-data"method="POST"><input type="text"name="value"id="value"><input type="submit"value="Upload"id="submit"></form>`;
-	res.send(document.documentElement.outerHTML);
-});
-app.post('/set/:setting', (req, res) => {
-	const { setting } = req.params;
-	const { document } = new JSDOM().window;
-	document.title = setting;
-	const form = new Formidable();
-	form.keepExtensions = true;
-	form.multiples = true;
+app.route('/set/:setting')
+	.get((req, res) => {
+		const { setting } = req.params;
+		const { document } = new JSDOM().window;
+		document.title = setting;
+		document.body.innerHTML = `<form action="/set/${setting}"enctype="multipart/form-data"method="POST"><input type="text"name="value"id="value"><input type="submit"value="Upload"id="submit"></form>`;
+		res.send(document.documentElement.outerHTML);
+	})
+	.post((req, res) => {
+		const { setting } = req.params;
+		const { document } = new JSDOM().window;
+		document.title = setting;
+		const form = new Formidable();
+		form.keepExtensions = true;
+		form.multiples = true;
 
-	form.parse(req, (err, fields) => {
-		res.redirect(`/set?${setting}=${fields.value}`);
+		form.parse(req, (err, fields) => {
+			res.redirect(`/set?${setting}=${fields.value}`);
+		});
 	});
-});
 
 /* ------------------------------ catch routes ------------------------------ */
 
