@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const { JSDOM } = require('jsdom');
 const express = require('express');
-const Formidable = require('formidable');
+// const Formidable = require('formidable');
 // const url = require('url');
 const yargs = require('yargs');
 
@@ -98,37 +98,7 @@ app.get('/redirect', (req, res) => {
 		: res.send('<h1>No redirect set</h1>');
 });
 
-// set
-app.get('/set', (req, res) => {
-	if (req.query) {
-		app.set('redirect', req.query['redirect']);
-		res.end(`<h1>redirect set to ${app.get('redirect')}</h1>`);
-	} else {
-		// set page
-		res.status(501).sendFile(path.join(__dirname, '501.html'));
-	}
-});
-app.get('/set/:setting', (req, res) => {
-	const { setting } = req.params;
-	const { document } = new JSDOM().window;
-	document.title = setting;
-	document.body.innerHTML = `<form action="/set/${setting}"enctype="multipart/form-data"method="POST"><input type="text"name="url"id="url"><input type="submit"value="Upload"id="submit"></form>`;
-	res.end(document.documentElement.outerHTML);
-});
-app.post('/set/:setting', (req, res) => {
-	const { setting } = req.params;
-	const { document } = new JSDOM().window;
-	document.title = setting;
-	const form = new Formidable();
-	form.keepExtensions = true;
-	form.multiples = true;
-
-	form.parse(req, (err, fields) => {
-		app.set(setting, fields.url);
-		document.body.innerHTML = `<h1>${setting} set to ${app.get(setting)}</h1>`;
-		res.end(document.documentElement.outerHTML);
-	});
-});
+app.use(require('./routes/set'));
 
 /* ------------------------------ catch routes ------------------------------ */
 
