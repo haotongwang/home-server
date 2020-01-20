@@ -95,12 +95,7 @@ app.get(['/', '/index.html'], (req, res) => {
 
 app.use(require('./routes/upload')(global));
 
-// redirect
-app.get('/redirect', (req, res) => {
-	typeof app.get('redirect') === 'string' && app.get('redirect')
-		? res.redirect(app.get('redirect'))
-		: res.send('<h1>No redirect set</h1>');
-});
+app.use(require('./routes/redirect'));
 
 app.use(require('./routes/set'));
 
