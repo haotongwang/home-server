@@ -1,4 +1,5 @@
-'use strict';
+/* eslint-env node */
+"use strict";
 
 const util = require('util'); // eslint-disable-line no-unused-vars
 const fs = require('fs');
@@ -35,20 +36,20 @@ const args = yargs
 	.help()
 	.argv;
 
-const global = (() => {
-	const serveDirectory = fs.statSync(args['dir']).isDirectory()
-		? args['dir']
-		: (() => {
-			console.log(`Invalid path: ${args['dir']}`);
-			return path.join(__dirname, 'public');
-		})();
+/* ------------------------------ app globals ------------------------------ */
 
-	const PORT = args['port'] >= 0
-		? args['port']
-		: args['run'] ? 8080 : 5000; // 5000 dev, 8080 run
+global.serveDirectory = fs.statSync(args['dir']).isDirectory()
+	? args['dir']
+	: (() => {
+		console.log(`Invalid path: ${args['dir']}`);
+		return path.join(__dirname, 'public');
+	})();
 
-	return { serveDirectory, PORT };
-})();
+global.PORT = args['port'] >= 0
+	? args['port']
+	: args['run'] ? 8080 : 5000; // 5000 dev, 8080 run
+
+global.mainDir = __dirname;
 
 /* ------------------------------- functions ------------------------------- */
 
@@ -63,7 +64,7 @@ app.get(['/', '/index.html'], (req, res) => {
 
 /* ----------------------------- import routes ----------------------------- */
 
-app.use(require('./routes/upload')(global));
+app.use(require('./routes/upload'));
 
 app.use(require('./routes/redirect'));
 

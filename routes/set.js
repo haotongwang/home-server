@@ -17,7 +17,7 @@ module.exports = (function() {
 			}
 		} else {
 			// set page
-			res.status(501).sendFile(path.resolve('./501.html'));
+			res.status(501).sendFile(path.join(global.mainDir, '501.html'));
 		}
 	});
 	router.route('/set/:setting')

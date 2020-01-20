@@ -6,7 +6,7 @@ const Formidable = require('formidable');
 const url = require('url');
 const fs = require('fs');
 
-module.exports = function(main) {
+module.exports = (function() {
 	router.post('/upload', (req, res) => {
 		const form = new Formidable();
 		form.keepExtensions = true;
@@ -22,10 +22,10 @@ module.exports = function(main) {
 
 				const urlBase = path.basename(req.get('referer'));
 				const urlPath = url.parse(req.get('referer')).pathname;
-				const fileDir = urlBase === `localhost:${main.PORT}`
+				const fileDir = urlBase === `localhost:${global.PORT}`
 					|| urlBase === 'index.html'
-					? main.serveDirectory
-					: path.join(main.serveDirectory, urlPath);
+					? global.serveDirectory
+					: path.join(global.serveDirectory, urlPath);
 
 				upload.forEach((file) => {
 					fs.renameSync(file.path, path.join(fileDir, file.name));
@@ -37,4 +37,4 @@ module.exports = function(main) {
 	});
 
 	return router;
-};
+})();
