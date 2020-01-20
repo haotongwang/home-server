@@ -1,9 +1,9 @@
 "use strict";
 
-const { JSDOM } = require('jsdom');
 const router = require('express').Router(); // eslint-disable-line new-cap
 const Formidable = require('formidable');
 const path = require('path');
+const htmlGen = require(path.join(global.mainDir, 'lib/htmlGen'));
 
 module.exports = (function() {
 	router.get('/set', (req, res) => {
@@ -12,7 +12,8 @@ module.exports = (function() {
 				if (req.query.hasOwnProperty(setting)) {
 					const value = req.query[setting];
 					router.set(setting, value);
-					res.end(`<h1>${setting} set to ${value}</h1>`);
+					const content = `<h1>${setting} set to ${value}</h1>`;
+					res.send(htmlGen.wrap('Set successful', content));
 				}
 			}
 		} else {
@@ -23,10 +24,8 @@ module.exports = (function() {
 	router.route('/set/:setting')
 		.get((req, res) => {
 			const { setting } = req.params;
-			const { document } = new JSDOM().window;
-			document.title = setting;
-			document.body.innerHTML = `<form action="/set/${setting}"enctype="multipart/form-data"method="POST"><input type="text"name="value"id="value"><input type="submit"value="Upload"id="submit"></form>`;
-			res.send(document.documentElement.outerHTML);
+			const content = `<form action="/set/${setting}"enctype="multipart/form-data"method="POST"><input type="text"name="value"id="value"><input type="submit"value="Upload"id="submit"></form>`;
+			res.send(htmlGen.wrap(`Set ${setting}`, content));
 		})
 		.post((req, res) => {
 			const { setting } = req.params;
