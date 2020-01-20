@@ -35,16 +35,20 @@ const args = yargs
 	.help()
 	.argv;
 
-const serveDirectory = fs.statSync(args['dir']).isDirectory()
-	? args['dir']
-	: (() => {
-		console.log(`Invalid path: ${args['dir']}`);
-		return path.join(__dirname, 'public');
-	})();
+const global = (() => {
+	const serveDirectory = fs.statSync(args['dir']).isDirectory()
+		? args['dir']
+		: (() => {
+			console.log(`Invalid path: ${args['dir']}`);
+			return path.join(__dirname, 'public');
+		})();
 
-const PORT = args['port'] >= 0
-	? args['port']
-	: args['run'] ? 8080 : 5000; // 5000 dev, 8080 run
+	const PORT = args['port'] >= 0
+		? args['port']
+		: args['run'] ? 8080 : 5000; // 5000 dev, 8080 run
+
+	return { serveDirectory, PORT };
+})();
 
 /* ------------------------------- functions ------------------------------- */
 
@@ -84,12 +88,12 @@ function generateHTML(dirPath, title=null) {
 
 // home page
 app.get(['/', '/index.html'], (req, res) => {
-	res.send(generateHTML(serveDirectory, 'Home Server'));
+	res.send(generateHTML(global.serveDirectory, 'Home Server'));
 });
 
 /* ----------------------------- import routes ----------------------------- */
 
-app.use(require('./routes/upload')({ PORT, serveDirectory }));
+app.use(require('./routes/upload')(global));
 
 // redirect
 app.get('/redirect', (req, res) => {
@@ -104,7 +108,7 @@ app.use(require('./routes/set'));
 
 // generalised page generation
 app.get('*', (req, res, next) => {
-	const abs = path.join(serveDirectory, req.url);
+	const abs = path.join(global.serveDirectory, req.url);
 	if (fs.existsSync(abs) && fs.statSync(abs).isDirectory()) {
 		res.send(generateHTML(abs));
 	} else {
@@ -113,7 +117,7 @@ app.get('*', (req, res, next) => {
 });
 
 // static files
-app.use(express.static(serveDirectory));
+app.use(express.static(global.serveDirectory));
 
 // 404
 app.use((req, res) => {
@@ -122,4 +126,4 @@ app.use((req, res) => {
 
 /* --------------------------------- server --------------------------------- */
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}...`));
+app.listen(global.PORT, () => console.log(`Server started on global.PORT ${global.PORT}...`));
