@@ -6,7 +6,6 @@ const Formidable = require('formidable');
 const path = require('path');
 
 module.exports = (function() {
-	// set
 	router.get('/set', (req, res) => {
 		if (Object.keys(req.query).length > 0) {
 			for (const setting in req.query) {

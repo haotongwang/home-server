@@ -7,7 +7,6 @@ const url = require('url');
 const fs = require('fs');
 
 module.exports = function(main) {
-	// upload POST method
 	router.post('/upload', (req, res) => {
 		const form = new Formidable();
 		form.keepExtensions = true;
