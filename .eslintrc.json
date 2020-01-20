@@ -25,6 +25,7 @@
         "comma-dangle": "off",
         "max-len": "off",
         "operator-linebreak": ["error", "before"],
-        "no-undef": ["error", { "typeof": true }]
+        "no-undef": ["error", { "typeof": true }],
+        "require-jsdoc": "off"
     }
 }
