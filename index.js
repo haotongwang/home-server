@@ -89,7 +89,7 @@ app.get(['/', '/index.html'], (req, res) => {
 
 /* ----------------------------- import routes ----------------------------- */
 
-app.use(require('./routes/server_actions')({ PORT, serveDirectory }));
+app.use(require('./routes/upload')({ PORT, serveDirectory }));
 
 // redirect
 app.get('/redirect', (req, res) => {
