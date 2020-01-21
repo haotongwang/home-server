@@ -11,6 +11,8 @@
 
 * use async functions when possible
 
+* config file
+
 ## ideas
 
 * ui for redirect
