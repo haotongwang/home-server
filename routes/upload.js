@@ -14,7 +14,6 @@ module.exports = (function() {
 
 		form.parse(req, (err, fields, files) => {
 			if (err) console.error(err);
-			console.log(files.upload);
 			if (files.upload) {
 				const upload = files.upload instanceof Array
 					? files.upload
