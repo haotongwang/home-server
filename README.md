@@ -13,6 +13,8 @@
 
 * config file
 
+* allow deletion of uploads
+
 ## ideas
 
 * ui for redirect
