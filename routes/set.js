@@ -11,7 +11,7 @@ module.exports = (function() {
 			for (const setting in req.query) {
 				if (req.query.hasOwnProperty(setting)) {
 					const value = req.query[setting];
-					router.set(setting, value);
+					global.setting[setting] = value;
 					const content = `<h1>${setting} set to ${value}</h1>`;
 					res.send(htmlGen.wrap('Set successful', content));
 				}

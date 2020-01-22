@@ -51,6 +51,8 @@ global.PORT = args['port'] >= 0
 
 global.mainDir = __dirname;
 
+global.setting = {};
+
 /* ------------------------------- functions ------------------------------- */
 
 const htmlGen = require('./lib/htmlGen');
