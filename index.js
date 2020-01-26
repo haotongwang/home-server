@@ -12,6 +12,10 @@ const yargs = require('yargs');
 
 const app = express();
 
+/* --------------------------------- config --------------------------------- */
+
+const config = JSON.parse(fs.readFileSync(path.join(__dirname, 'config.json')));
+
 const args = yargs
 	.options({
 		'p': {
@@ -22,7 +26,7 @@ const args = yargs
 		},
 		'd': {
 			alias: ['-path', '-dir'],
-			default: path.join(__dirname, 'public'),
+			default: config.default.serveDirectory,
 			describe: 'path to directory for serving static files',
 			type: 'string'
 		},
@@ -36,22 +40,18 @@ const args = yargs
 	.help()
 	.argv;
 
-/* --------------------------------- config --------------------------------- */
-
-const config = JSON.parse(fs.readFileSync(path.join(__dirname, 'config.json')));
-
 /* ------------------------------ app globals ------------------------------ */
 
 global.serveDirectory = fs.statSync(args['dir']).isDirectory()
 	? args['dir']
 	: (() => {
-		console.log(`Invalid path: ${args['dir']}`);
-		return path.join(__dirname, 'public');
+		console.log(`Invalid path: ${args['dir']}, serve directory set to ${config.default.serveDirectory}`);
+		return config.default.serveDirectory;
 	})();
 
 global.PORT = args['port'] >= 0
 	? args['port']
-	: args['run'] ? 8080 : 5000; // 5000 dev, 8080 run
+	: args['run'] ? config.default.PORT_run : config.default.PORT_dev;
 
 global.mainDir = __dirname;
 
