@@ -11,8 +11,6 @@
 
 * use async functions when possible
 
-* config file
-
 * allow deletion of uploads
 
 * https
