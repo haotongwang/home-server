@@ -2,11 +2,6 @@
 
 ## to-do
 
-* refactor index.js into multiple files and modules
-  * architecture for settings
-    * only allow valid settings to be set
-  * html generator and minimizer
-
 * page for set
 
 * use async functions when possible
