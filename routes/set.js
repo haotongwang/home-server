@@ -10,7 +10,10 @@ module.exports = (function() {
 	router.get('/set', (req, res) => {
 		if (Object.keys(req.query).length > 0) {
 			for (const action in req.query) {
-				if (req.query.hasOwnProperty(action)) {
+				if (
+					req.query.hasOwnProperty(action)
+					&& global.action.hadOwnProperty(action)
+				) {
 					const value = req.query[action];
 					global.action[action] = value;
 					const content = `<h1>${action} set to ${value}</h1>`;
