@@ -4,9 +4,7 @@
 		"PORT_run": 8080,
 		"PORT_dev": 5000
 	},
-	"setting": {
-		"action": {
-			"redirect": null
-		}
+	"action": {
+		"redirect": null
 	}
 }

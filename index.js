@@ -55,7 +55,7 @@ global.PORT = args['port'] >= 0
 
 global.mainDir = __dirname;
 
-global.setting = {};
+global.action = config.action;
 
 /* ------------------------------- functions ------------------------------- */
 
