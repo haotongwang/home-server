@@ -1,0 +1,12 @@
+{
+	"default": {
+		"serveDirectory": "C:/Users/whako/Desktop/public",
+		"PORT_start": 8080,
+		"PORT_dev": 5000
+	},
+	"setting": {
+		"action": {
+			"redirect": null
+		}
+	}
+}

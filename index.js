@@ -36,6 +36,10 @@ const args = yargs
 	.help()
 	.argv;
 
+/* --------------------------------- config --------------------------------- */
+
+const config = JSON.parse(fs.readFileSync(path.join(__dirname, 'config.json')));
+
 /* ------------------------------ app globals ------------------------------ */
 
 global.serveDirectory = fs.statSync(args['dir']).isDirectory()
