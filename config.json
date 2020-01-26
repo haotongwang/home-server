@@ -5,6 +5,6 @@
 		"PORT_dev": 5000
 	},
 	"action": {
-		"redirect": null
+		"redirect": "test"
 	}
 }
