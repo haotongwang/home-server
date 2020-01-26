@@ -12,11 +12,11 @@ module.exports = (function() {
 			for (const action in req.query) {
 				if (req.query.hasOwnProperty(action)) {
 					const value = req.query[action];
-					global.config.action[action] = value;
+					global.action[action] = value;
 					const content = `<h1>${action} set to ${value}</h1>`;
 					fs.writeFile(
-						path.join(global.mainDir, 'config.json'),
-						JSON.stringify(global.config, null, '\t'),
+						path.join(global.mainDir, 'action.json'),
+						JSON.stringify(global.action, null, '\t'),
 						(err) => err && console.error(err)
 					);
 					res.send(htmlGen.wrap('Set successful', content));

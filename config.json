@@ -3,8 +3,5 @@
 		"serveDirectory": "C:/Users/whako/Desktop/local",
 		"PORT_run": 8080,
 		"PORT_dev": 5000
-	},
-	"action": {
-		"redirect": "test"
 	}
 }
