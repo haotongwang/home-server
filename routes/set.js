@@ -9,22 +9,25 @@ const htmlGen = require(path.join(global.mainDir, 'lib/htmlGen'));
 module.exports = (function() {
 	router.get('/set', (req, res) => {
 		if (Object.keys(req.query).length > 0) {
+			let content = '';
 			for (const action in req.query) {
 				if (
 					req.query.hasOwnProperty(action)
-					&& global.action.hadOwnProperty(action)
+					&& global.action.hasOwnProperty(action)
 				) {
 					const value = req.query[action];
 					global.action[action] = value;
-					const content = `<h1>${action} set to ${value}</h1>`;
 					fs.writeFile(
 						path.join(global.mainDir, 'action.json'),
 						JSON.stringify(global.action, null, '\t'),
 						(err) => err && console.error(err)
 					);
-					res.send(htmlGen.wrap('Set successful', content));
+					content += `<h1>${action} set to ${value}</h1>`;
+				} else {
+					content += `<h1>${action} not found</h1>`;
 				}
 			}
+			res.send(htmlGen.wrap('Set', content));
 		} else {
 			// set page
 			res.status(501).sendFile(path.join(global.mainDir, '501.html'));
