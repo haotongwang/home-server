@@ -12,6 +12,8 @@ const yargs = require('yargs');
 
 const app = express();
 
+/* --------------------------------- params --------------------------------- */
+
 const args = yargs
 	.options({
 		'p': {
@@ -22,7 +24,7 @@ const args = yargs
 		},
 		'd': {
 			alias: ['-path', '-dir'],
-			default: path.join(__dirname, 'public'),
+			default: '',
 			describe: 'path to directory for serving static files',
 			type: 'string'
 		},
@@ -38,20 +40,29 @@ const args = yargs
 
 /* ------------------------------ app globals ------------------------------ */
 
-global.serveDirectory = fs.statSync(args['dir']).isDirectory()
-	? args['dir']
-	: (() => {
-		console.log(`Invalid path: ${args['dir']}`);
-		return path.join(__dirname, 'public');
-	})();
+{
+	const configPath = path.join(__dirname, 'config.json');
+	global.config = JSON.parse(fs.readFileSync(configPath));
 
-global.PORT = args['port'] >= 0
-	? args['port']
-	: args['run'] ? 8080 : 5000; // 5000 dev, 8080 run
+	const def = global.config.default;
+	global.serveDirectory = args['dir'] || def.serveDirectory;
+	if (!fs.statSync(global.serveDirectory).isDirectory()) {
+		console.log(`Invalid path: ${args['dir']}, serve directory set to ${def.serveDirectory}`);
+		global.serveDirectory = def.serveDirectory;
+	}
 
-global.mainDir = __dirname;
+	global.PORT = args['port'] >= 0
+		? args['port']
+		: args['run']
+			? def.PORT_run : def.PORT_dev;
 
-global.setting = {};
+	global.mainDir = __dirname;
+
+	const actionPath = path.join(__dirname, 'action.json');
+	global.action = fs.existsSync(actionPath)
+		? JSON.parse(fs.readFileSync(actionPath))
+		: { redirect: null };
+}
 
 /* ------------------------------- functions ------------------------------- */
 
