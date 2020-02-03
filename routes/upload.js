@@ -14,11 +14,11 @@ module.exports = (function() {
 
 		form.parse(req, (err, fields, files) => {
 			if (err) console.error(err);
-			if (files.upload) {
-				const upload = files.upload instanceof Array
-					? files.upload
-					: [files.upload];
+			const upload = files.upload instanceof Array
+				? files.upload
+				: [files.upload];
 
+			if (upload[0].size !== 0) {
 				const urlBase = path.basename(req.get('referer'));
 				const urlPath = url.parse(req.get('referer')).pathname;
 				const fileDir = urlBase === `localhost:${global.PORT}`
