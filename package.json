@@ -4,7 +4,8 @@
   "description": "Home server mainly for sharing files",
   "main": "index.js",
   "scripts": {
-    "start": "node index",
+    "run": "node index -r",
+    "start": "node index -r",
     "dev": "nodemon index"
   },
   "repository": {
