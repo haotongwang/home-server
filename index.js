@@ -9,8 +9,15 @@ const express = require('express');
 // const Formidable = require('formidable');
 // const url = require('url');
 const yargs = require('yargs');
+const http = require('http');
+const https = require('https');
 
 const app = express();
+
+const options = {
+	key: fs.readFileSync(path.join(__dirname, "certs/selfsigned.key")),
+	cert: fs.readFileSync(path.join(__dirname, "certs/selfsigned.crt"))
+};
 
 /* --------------------------------- params --------------------------------- */
 
@@ -86,6 +93,11 @@ app.use(require('./routes/set'));
 
 /* ------------------------------ catch routes ------------------------------ */
 
+// testing new features
+app.get('/test', (req, res) => {
+	res.sendFile(path.join(__dirname, 'test.html'));
+});
+
 // generalised page generation
 app.get('*', (req, res, next) => {
 	const abs = path.join(global.serveDirectory, req.url);
@@ -106,4 +118,18 @@ app.use((req, res) => {
 
 /* --------------------------------- server --------------------------------- */
 
-app.listen(global.PORT, () => console.log(`Server started on port ${global.PORT}...`));
+const server = https.createServer(options, app);
+
+server.listen(global.PORT, () => {
+	console.log(`Server started on port ${global.PORT}...`);
+});
+
+/* ----------------------------- http -> https ----------------------------- */
+
+{
+	const app = express();
+	app.get('*', (req, res) => {
+		res.redirect(301, `https://${req.hostname}${req.url}`);
+	});
+	http.createServer(app).listen(80);
+}

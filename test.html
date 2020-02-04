@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Test</title>
+</head>
+<body>
+	<output id="output"></output>
+	<br>
+	<script>
+		function getClipboard(elem) {
+			navigator.clipboard.readText()
+				.then((e) => {
+					elem.innerText = e;
+				})
+				.catch((e) => {
+					console.error(e);
+				});
+		}
+	</script>
+	<button onclick="getClipboard(output)">activate</button>
+</body>
+</html>
