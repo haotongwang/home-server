@@ -12,6 +12,11 @@ const yargs = require('yargs');
 
 const app = express();
 
+const credentials = {
+	key: fs.readFileSync(__dirname, "certs/selfsigned.key"),
+	cert: fs.readFileSync(__dirname, "certs/selfsigned.crt")
+};
+
 /* --------------------------------- params --------------------------------- */
 
 const args = yargs
