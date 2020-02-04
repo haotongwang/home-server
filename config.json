@@ -1,7 +1,7 @@
 {
 	"default": {
 		"serveDirectory": "C:/Users/whako/Desktop/local",
-		"PORT_run": 8080,
+		"PORT_run": 443,
 		"PORT_dev": 5000
 	}
 }
