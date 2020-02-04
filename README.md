@@ -8,8 +8,6 @@
 
 * allow deletion of uploads
 
-* https
-
 ## ideas
 
 * use a front-end framework (html or css)
