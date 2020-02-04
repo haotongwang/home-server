@@ -8,6 +8,10 @@
 
 * allow deletion of uploads
 
+* use let's encrypt for official cert
+
+* set redirect using clipboard
+
 ## ideas
 
 * use a front-end framework (html or css)
