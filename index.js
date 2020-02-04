@@ -9,6 +9,7 @@ const express = require('express');
 // const Formidable = require('formidable');
 // const url = require('url');
 const yargs = require('yargs');
+const http = require('http');
 const https = require('https');
 
 const app = express();
@@ -122,3 +123,13 @@ const server = https.createServer(options, app);
 server.listen(global.PORT, () => {
 	console.log(`Server started on port ${global.PORT}...`);
 });
+
+/* ----------------------------- http -> https ----------------------------- */
+
+{
+	const app = express();
+	app.get('*', (req, res) => {
+		res.redirect(301, `https://${req.hostname}${req.url}`);
+	});
+	http.createServer(app).listen(80);
+}
