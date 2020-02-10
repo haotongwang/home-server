@@ -83,6 +83,11 @@ app.get(['/', '/index.html'], (req, res) => {
 	res.send(htmlGen.directory(global.serveDirectory, 'Home Server'));
 });
 
+// favicon
+app.get('/favicon.ico', (req, res) => {
+	res.send(path.join(__dirname, 'favicon', 'favicon.ico'));
+});
+
 /* ----------------------------- import routes ----------------------------- */
 
 app.use(require('./routes/upload'));
@@ -101,7 +106,7 @@ app.get('/test', (req, res) => {
 // generalised page generation
 app.get('*', (req, res, next) => {
 	const abs = path.join(global.serveDirectory, req.url);
-	if (fs.existsSync(abs) && fs.statSync(abs).isDirectory()) {
+	if (fs.accessSync(abs) && fs.statSync(abs).isDirectory()) {
 		res.send(htmlGen.directory(abs));
 	} else {
 		next();
