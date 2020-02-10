@@ -4,8 +4,6 @@
 
 * page for set
 
-* use async functions when possible
-
 * allow deletion of uploads
 
 * use let's encrypt for official cert
