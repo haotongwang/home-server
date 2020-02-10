@@ -126,7 +126,7 @@ server.listen(global.PORT, () => {
 
 /* ----------------------------- http -> https ----------------------------- */
 
-{
+if (args['run']) {
 	const app = express();
 	app.get('*', (req, res) => {
 		res.redirect(301, `https://${req.hostname}${req.url}`);
