@@ -27,7 +27,11 @@ module.exports = (function() {
 					: path.join(global.serveDirectory, urlPath);
 
 				upload.forEach((file) => {
-					fs.renameSync(file.path, path.join(fileDir, file.name));
+					fs.rename(
+						file.path,
+						path.join(fileDir, file.name),
+						(err) => console.error(err)
+					);
 				});
 			}
 
