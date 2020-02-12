@@ -106,7 +106,7 @@ app.get('/test', (req, res) => {
 // generalised page generation
 app.get('*', (req, res, next) => {
 	const abs = path.join(global.serveDirectory, req.url);
-	if (fs.accessSync(abs) && fs.statSync(abs).isDirectory()) {
+	if (fs.existsSync(abs) && fs.statSync(abs).isDirectory()) {
 		res.send(htmlGen.directory(abs));
 	} else {
 		next();
