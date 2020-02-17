@@ -96,6 +96,8 @@ app.use(require('./routes/redirect'));
 
 app.use(require('./routes/set'));
 
+app.use(require('./routes/tabs'));
+
 /* ------------------------------ catch routes ------------------------------ */
 
 // testing new features
