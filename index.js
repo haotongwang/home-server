@@ -69,7 +69,7 @@ const args = yargs
 	const actionPath = path.join(__dirname, 'action.json');
 	global.action = fs.existsSync(actionPath)
 		? JSON.parse(fs.readFileSync(actionPath))
-		: { redirect: null };
+		: {};
 }
 
 /* ------------------------------- functions ------------------------------- */
