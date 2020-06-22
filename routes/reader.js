@@ -7,6 +7,22 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports = (function() {
+	router.get('/reader/replace', (req, res) => {
+		let result = '';
+		for (const q in req.query) {
+			if (req.query.hasOwnProperty(q)) {
+				global.action['reader-replace'][q] = req.query[q];
+				result += `${q} replaced with ${req.query[q]}<br>`;
+			}
+		}
+		fs.writeFile(
+			path.join(global.mainDir, 'action.json'),
+			JSON.stringify(global.action, null, '\t'),
+			(err) => err && console.error(err)
+		);
+		res.send(htmlGen.wrap(result));
+	});
+
 	router.get('/reader', (req, res) => {
 		const u = req.query['url'] || global.action['reader-url'];
 		if (u == null) {
@@ -54,19 +70,24 @@ module.exports = (function() {
 				const script = document.createElement('script');
 				script.innerHTML = `
 					document.addEventListener('keydown', (event) => {
-					switch (event.keyCode) {
-						case 39:
-							// next page
-							document.querySelector('#next_chap').click();
-							break;
-						case 37:
-							// previous page
-							document.querySelector('#prev_chap').click();
-							break;
+						switch (event.keyCode) {
+							case 39:
+								// next page
+								document.querySelector('#next_chap').click();
+								break;
+							case 37:
+								// previous page
+								document.querySelector('#prev_chap').click();
+								break;
+
 						}
 					});
 				`;
 				document.head.appendChild(script);
+
+				const space = document.createElement('div');
+				space.style = 'height:100vh;';
+				document.body.appendChild(space);
 
 				let page = j.serialize();
 
@@ -74,9 +95,7 @@ module.exports = (function() {
 
 
 				for (const str in replace) {
-					if (
-						replace.hasOwnProperty(str)
-					) {
+					if (replace.hasOwnProperty(str)) {
 						page = page.replace(new RegExp(str, 'g'), replace[str]);
 					}
 				}
