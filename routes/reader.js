@@ -23,19 +23,34 @@ module.exports = (function() {
 		res.send(htmlGen.wrap(result));
 	});
 
-	router.get('/reader', (req, res) => {
-		const u = req.query['url'] || global.action['reader-url'];
-		if (u == null) {
-			res.send(htmlGen.wrap('No url'));
-		};
-
-		// set new last url
-		global.action['reader-url'] = u;
+	router.get('/reader/clear', (req, res) => {
+		global.action['reader-replace'] = {};
+		global.action['reader-url'] = '';
 		fs.writeFile(
 			path.join(global.mainDir, 'action.json'),
 			JSON.stringify(global.action, null, '\t'),
 			(err) => err && console.error(err)
 		);
+		res.send(htmlGen.wrap("Reader cleared"));
+	});
+
+	router.get('/reader', (req, res) => {
+		if (req.query['url']) {
+			// set new last url
+			global.action['reader-url'] = req.query['url'];
+			fs.writeFile(
+				path.join(global.mainDir, 'action.json'),
+				JSON.stringify(global.action, null, '\t'),
+				(err) => err && console.error(err)
+			);
+			res.redirect('/reader');
+		}
+
+		const u = global.action['reader-url'];
+
+		if (u == null) {
+			res.send(htmlGen.wrap('No url'));
+		};
 
 		JSDOM.fromURL(u)
 			.then((dom) => {
@@ -51,16 +66,20 @@ module.exports = (function() {
 				document.querySelector('.col-xs-12').style = `padding-left:90px;padding-right:90px;`;
 				document.querySelector('#chapter-content').style = `font-family:'Times New Roman';`;
 
-				document.querySelectorAll('a').forEach((h) => {
-					h.style = 'color:#82A82D';
+				document.querySelectorAll('p').forEach((h) => {
+					h.style = `font-size:32px;color:rgba(255,255,255,0.6);`;
 				});
 
-				document.querySelectorAll('p').forEach((h) => {
-					h.style = `font-size:32px;`;
+				document.querySelectorAll('span').forEach((h) => {
+					h.style = `color:rgba(255,255,255,0.6);`;
 				});
 
 				document.querySelectorAll('a').forEach((h) => {
 					h.href = `/reader?url=${url.origin}${h.href}`;
+				});
+
+				document.querySelectorAll('a').forEach((h) => {
+					h.style = 'color:#82A82D';
 				});
 
 				document.querySelectorAll('script').forEach((h) => {
