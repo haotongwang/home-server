@@ -34,6 +34,10 @@ module.exports = (function() {
 		res.send(htmlGen.wrap("Reader cleared"));
 	});
 
+	router.get('/reader/url', (req, res) => {
+		res.send(htmlGen.wrap(`Reader URL: ${global.action['reader-url']}`));
+	});
+
 	router.get('/reader', (req, res) => {
 		if (req.query['url']) {
 			// set new last url
@@ -69,6 +73,12 @@ module.exports = (function() {
 				document.querySelectorAll('p').forEach((h) => {
 					h.style = `font-size:32px;color:rgba(255,255,255,0.6);`;
 				});
+
+				document.querySelectorAll('table').forEach((h) => {
+					h.style = `font-size:32px;color:rgba(255,255,255,0.6);`;
+				});
+
+				document.querySelector('#chapter-content').style = `font-size:32px;color:rgba(255,255,255,0.6);`;
 
 				document.querySelectorAll('span').forEach((h) => {
 					h.style = `color:rgba(255,255,255,0.6);`;
