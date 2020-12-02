@@ -29,7 +29,7 @@ module.exports = (function() {
                     content += `<h1>${action} not found</h1>`;
                 }
             }
-            res.send(htmlGen.wrap('Set', content));
+            res.send(htmlGen.wrap(content));
         } else {
             // set page
             res.status(501).sendFile(path.join(global.mainDir, 'pages/501.html'));
@@ -39,7 +39,7 @@ module.exports = (function() {
         .get((req, res) => {
             const { action } = req.params;
             const content = `<form action="/set/${action}"enctype="multipart/form-data"method="POST"><input type="text"name="value"id="value"><input type="submit"value="Upload"id="submit"></form>`;
-            res.send(htmlGen.wrap(`Set ${action}`, content));
+            res.send(htmlGen.wrap(content, `Set ${action}`));
         })
         .post((req, res) => {
             const { action } = req.params;
