@@ -3,5 +3,25 @@
 		"serveDirectory": "C:/Users/whako/Desktop/local",
 		"PORT_run": 443,
 		"PORT_dev": 5000
+	},
+	"reader-targets": {
+		"novelfull.com": {
+			"title": "a.truyen-title",
+			"content": "#chapter-content",
+			"next": "#next_chap",
+			"prev": "#prev_chap"
+		},
+		"readlightnovel.com": {
+			"title": "div.block-title > h1 > a",
+			"content": "#chapter-content3 > div.desc",
+			"next": ".next.next-link",
+			"prev": ".prev.prev-link"
+		},
+		"wuxiaworld.com": {
+			"title": "div.top-bar-area > ul > li.caption > a",
+			"content": "#chapter-content",
+			"next": "div.top-bar-area > ul > li.next > a",
+			"prev": "div.top-bar-area > ul > li.prev > a"
+		}
 	}
 }
