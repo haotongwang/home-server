@@ -1,9 +1,10 @@
 "use strict";
 
-const router = require('express').Router(); // eslint-disable-line new-cap
-const htmlGen = require('../lib/htmlGen');
+import express from 'express';
+import htmlGen from '../lib/htmlGen';
+const router = express.Router();
 
-module.exports = (function() {
+module.exports = (function () {
 	router.get('/messages', (req, res) => {
 		const messages = global.action.open['messages'];
 		let script = `<script>`;

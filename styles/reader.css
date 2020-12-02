@@ -1,0 +1,29 @@
+:root {
+    --dark: #232323;
+    --text: rgba(255, 255, 255, 0.6);
+    --link: #82A82D;
+}
+
+body {
+    background-color: var(--dark);
+    color: var(--text);
+}
+
+p {
+    padding-left: 90px;
+    padding-right: 90px;
+    font-size: 32px;
+    color: var(--text);
+}
+
+a {
+    color: var(--link);
+}
+
+#chapter-content {
+    font-family: 'Times New Roman';
+}
+
+#space {
+    height: 100vh;
+}

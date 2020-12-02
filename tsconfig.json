@@ -11,12 +11,11 @@
         "sourceMap": true,
         "baseUrl": ".",
         "incremental": true,
-        "watch": true,
         "outDir": "./dist/"
     },
     "include": [
-        "./index.ts",
-        "./**/*.ts"
+        "src/index.ts",
+        "src/**/*.ts"
     ],
     "exclude": [
         "node_modules"
