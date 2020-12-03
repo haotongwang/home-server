@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "start": "node dist/index -r",
-    "nodemon": "nodemon",
+    "nodemon": "nodemon -e js,ts,tsx,html,css --watch . --watch src/**/*",
     "compile": "tsc -p tsconfig.json",
     "watch-compile": "tsc -p tsconfig.json --watch",
     "build": "npm-run-all -p compile",

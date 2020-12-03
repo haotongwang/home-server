@@ -5,18 +5,31 @@ declare namespace NodeJS {
                 "serveDirectory": string,
                 "PORT_run": Port,
                 "PORT_dev": Port
+            },
+            "reader": {
+                "whitelist": string[],
+                "targets": {
+                    [url: string]: {
+                        "title": string,
+                        "content": string,
+                        "next": string,
+                        "prev": string,
+                    }
+                }
             }
         },
         serveDirectory: string,
         PORT: Port,
         mainDir: string,
         action: {
-            "redirect": URL,
+            "redirect": string,
             "open": {
-                "messages": [URL]
+                "messages": [string]
             },
-            "reader-url": URL,
-            "reader-replace": { [key: string]: string }
+            "reader": {
+                "url": string,
+                "replace": { [key: string]: string }
+            }
         }
     }
 }

@@ -7,13 +7,9 @@
 body {
     background-color: var(--dark);
     color: var(--text);
-}
-
-p {
+    font-family: 'Times New Roman';
     padding-left: 90px;
     padding-right: 90px;
-    font-size: 32px;
-    color: var(--text);
 }
 
 a {
@@ -21,7 +17,9 @@ a {
 }
 
 #chapter-content {
-    font-family: 'Times New Roman';
+    font-size: 27px;
+    color: var(--text);
+    line-height: 160%;
 }
 
 #space {

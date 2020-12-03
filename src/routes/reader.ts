@@ -13,7 +13,7 @@ module.exports = (function() {
         let result = '';
         for (const q in req.query) {
             if (req.query.hasOwnProperty(q)) {
-                global.action['reader-replace'][q] = req.query[q] as string;
+                global.action.reader.replace[q] = req.query[q] as string;
                 result += `${q} replaced with ${req.query[q]}<br>`;
             }
         }
@@ -26,8 +26,8 @@ module.exports = (function() {
     });
 
     router.get('/reader/clear', (req, res) => {
-        global.action['reader-replace'] = {};
-        global.action['reader-url'] = null;
+        global.action.reader.replace = {};
+        global.action.reader.url = '';
         fs.writeFile(
             path.join(global.mainDir, 'action.json'),
             JSON.stringify(global.action, null, '\t'),
@@ -37,73 +37,63 @@ module.exports = (function() {
     });
 
     router.get('/reader/url', (req, res) => {
-        res.send(htmlGen.wrap(`Reader URL: ${global.action['reader-url']}`));
+        res.send(htmlGen.wrap(`Reader URL: ${global.action.reader.url}`));
     });
 
     router.get('/reader', (req, res) => {
         if (req.query['url']) {
             // set new last url
-            global.action['reader-url'] = new URL(req.query['url'] as string);
+            global.action.reader.url = req.query['url'] as string;
             fs.writeFile(
                 path.join(global.mainDir, 'action.json'),
                 JSON.stringify(global.action, null, '\t'),
                 (err) => err && console.error(err)
             );
             res.redirect('/reader');
+            return;
         }
 
-        const url = global.action['reader-url'];
+        const u = global.action.reader.url;
+        if (!u) res.send(htmlGen.wrap('No url'));
 
-        if (url == null) {
-            res.send(htmlGen.wrap('No url'));
-        }
-
-        JSDOM.fromURL(url.toString())
-            .then((dom) => {
+        JSDOM.fromURL(u)
+            .then((source) => {
+                const url = new URL(u);
                 const j = new JSDOM(fs.readFileSync("pages/reader.html"));
+                const document = j.window.document;
 
-                const window = j.window;
-                const document = window.document;
+                // Targets for reader
+                const whitelist = global.config.reader.whitelist;
+                const target = global.config.reader.targets[url.hostname];
+                const title = source.window.document.querySelector(target.title);
+                const content = source.window.document.querySelector(target.content);
+                const next = source.window.document.querySelector<HTMLAnchorElement>(target.next);
+                const prev = source.window.document.querySelector<HTMLAnchorElement>(target.prev);
 
-                document.body.appendChild(dom.window.document.querySelector('#chapter'));
-
-                document.querySelectorAll('a').forEach((h) => {
-                    h.href = `/reader?url=${url.origin}${h.href}`;
+                // Clean content
+                Object.values(content.children).forEach((child) => {
+                    if (!whitelist.includes(child.nodeName.toLowerCase())) child.remove();
                 });
+                content.removeAttribute('style');
+                content.removeAttribute('class');
+                content.setAttribute('id', 'chapter-content');
 
-
-                document.querySelectorAll('script').forEach((h) => {
-                    h.parentElement.removeChild(h);
-                });
-
-                const script = document.createElement('script');
-                script.innerHTML = `
-                    document.addEventListener('keydown', (event) => {
-                        switch (event.keyCode) {
-                            case 39:
-                                // next page
-                                document.querySelector('#next_chap').click();
-                                break;
-                            case 37:
-                                // previous page
-                                document.querySelector('#prev_chap').click();
-                                break;
-
-                        }
-                    });
-                `;
-                document.head.appendChild(script);
+                // Add parts
+                document.querySelector('title').innerText = title.innerHTML;
+                document.querySelector<HTMLAnchorElement>('#next_chap').href
+                    += `${next.href.startsWith('https://') ? '' : url.origin}${next.href}`;
+                document.querySelector<HTMLAnchorElement>('#prev_chap').href
+                    += `${prev.href.startsWith('https://') ? '' : url.origin}${prev.href}`;
+                const c = document.querySelector('#chapter-content');
+                c.parentNode.replaceChild(content, c);
 
                 let page = j.serialize();
 
-                const replace = global.action['reader-replace'];
-
-
-                for (const str in replace) {
-                    if (replace.hasOwnProperty(str)) {
-                        page = page.replace(new RegExp(str, 'g'), replace[str]);
-                    }
-                }
+                // Replace specified strings
+                const replace = global.action.reader.replace;
+                Object.entries(replace).forEach(([str, rep]) => {
+                    page = page.replace(new RegExp(str, 'g'), rep);
+                });
 
                 res.send(page);
             }).catch((e) => console.log(e));

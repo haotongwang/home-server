@@ -68,9 +68,7 @@ const args = yargs
 
     // Action
     const actionPath = 'action.json';
-    global.action = fs.existsSync(actionPath)
-        ? JSON.parse(fs.readFileSync(actionPath).toString())
-        : {};
+    global.action = JSON.parse(fs.readFileSync(actionPath).toString());
 }
 
 /* ------------------------------- functions ------------------------------- */
