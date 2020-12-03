@@ -4,7 +4,7 @@
   "description": "Home server mainly for sharing files",
   "main": "dist/index.js",
   "scripts": {
-    "start": "node dist/index -r",
+    "start": "node dist/index -r -d",
     "nodemon": "nodemon -e js,ts,tsx,html,css --watch . --watch src/**/*",
     "compile": "tsc -p tsconfig.json",
     "watch-compile": "tsc -p tsconfig.json --watch",
