@@ -78,8 +78,11 @@ module.exports = (function() {
                 content.removeAttribute('class');
                 content.setAttribute('id', 'chapter-content');
 
+                // Title
+                document.querySelector('title').innerHTML = title.innerHTML;
+                document.querySelector('#chapter-title').innerHTML = title.innerHTML;
+
                 // Add parts
-                document.querySelector('title').innerText = title.innerHTML;
                 document.querySelector<HTMLAnchorElement>('#next_chap').href
                     += `${next.href.startsWith('https://') ? '' : url.origin}${next.href}`;
                 document.querySelector<HTMLAnchorElement>('#prev_chap').href
