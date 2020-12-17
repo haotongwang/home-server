@@ -37,9 +37,7 @@ module.exports = (function() {
     });
     router.route('/set/:action')
         .get((req, res) => {
-            const { action } = req.params;
-            const content = `<form action="/set/${action}"enctype="multipart/form-data"method="POST"><input type="text"name="value"id="value"><input type="submit"value="Upload"id="submit"></form>`;
-            res.send(htmlGen.wrap(content, `Set ${action}`));
+            res.sendFile(path.join(global.mainDir, 'pages/set.html'));
         })
         .post((req, res) => {
             const { action } = req.params;

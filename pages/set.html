@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Set</title>
+	<link rel="shortcut icon" href="/favicon/favicon.ico" />
+</head>
+
+<body>
+	<form enctype="multipart/form-data" method="POST" id="form">
+		<input type="text" name="value" id="value">
+		<button type="button" onclick="document.querySelector('#value').value = ''" id="clear">
+			Clear
+		</button>
+		<input type="submit" value="Upload" id="submit">
+	</form>
+	<script>
+		navigator.clipboard.readText()
+			.then((text) => {
+				document.querySelector('#value').value = text;
+			})
+			.catch((e) => {
+				console.error(e);
+			});
+		document.querySelector('#form').action = document.URL;
+	</script>
+</body>
+
+</html>
