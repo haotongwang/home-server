@@ -26,8 +26,9 @@ module.exports = (function() {
     });
 
     router.get('/reader/url', (req, res) => {
+        const { url } = global.action.reader;
         res.send(htmlGen.wrap(`
-            Reader URL: <a href="${global.action.reader.url}">${global.action.reader.url}</a>
+            Reader URL: <a href="${url}">${url}</a>
         `));
     });
 

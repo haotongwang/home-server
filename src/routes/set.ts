@@ -10,26 +10,24 @@ const router = express.Router();
 module.exports = (function() {
     router.get('/set', (req, res) => {
         if (Object.keys(req.query).length > 0) {
+            // Set properties
             let content = '';
-            for (const action in req.query) {
-                if (
-                    req.query.hasOwnProperty(action)
-					&& global.action.hasOwnProperty(action)
-                ) {
-                    const value = req.query[action];
+            Object.entries(req.query).forEach(([action, value]) => {
+                if (global.action.hasOwnProperty(action)) {
                     global.action[action] = value;
-                    global.update.action();
                     content += `<h1>${action} set to ${value}</h1>`;
                 } else {
                     content += `<h1>${action} not found</h1>`;
                 }
-            }
+            });
+            global.update.action();
             res.send(htmlGen.wrap(content));
-        } else {
-            // set page
-            res.status(501).sendFile(path.join(global.mainDir, 'pages/501.html'));
+            return;
         }
+        // Set page
+        res.status(501).sendFile(path.join(global.mainDir, 'pages/501.html'));
     });
+
     router.route('/set/:action')
         .get((req, res) => {
             res.sendFile(path.join(global.mainDir, 'pages/set.html'));
