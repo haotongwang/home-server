@@ -7,6 +7,7 @@ import http from 'http';
 import https from 'https';
 import path from 'path';
 import yargs from 'yargs';
+import { updateJSON } from './lib/file';
 import htmlGen from './lib/htmlGen';
 
 const app = express();
@@ -49,6 +50,10 @@ const args = yargs
     const configPath = 'config.json';
     global.config = JSON.parse(fs.readFileSync(configPath).toString());
 
+    // Action
+    const actionPath = 'action.json';
+    global.action = JSON.parse(fs.readFileSync(actionPath).toString());
+
     // Serve directory
     const def = global.config.default;
     global.serveDirectory = args.d || def.serveDirectory;
@@ -66,9 +71,11 @@ const args = yargs
     // Main directory
     global.mainDir = path.resolve(__dirname, '..');
 
-    // Action
-    const actionPath = 'action.json';
-    global.action = JSON.parse(fs.readFileSync(actionPath).toString());
+    // Update functions
+    global.update = {
+        action: () => updateJSON('action.json', global.action),
+        config: () => updateJSON('config.json', global.config)
+    };
 }
 
 /* ------------------------------- functions ------------------------------- */

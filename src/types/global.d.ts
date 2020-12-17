@@ -30,6 +30,10 @@ declare namespace NodeJS {
                 "url": string,
                 "replace": { [key: string]: string }
             }
+        },
+        update: {
+            action: () => void,
+            config: () => void
         }
     }
 }

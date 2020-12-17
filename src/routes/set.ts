@@ -2,7 +2,6 @@
 
 import express from 'express';
 import { IncomingForm as Formidable } from 'formidable';
-import fs from 'fs';
 import path from 'path';
 import htmlGen from '../lib/htmlGen';
 // eslint-disable-next-line new-cap
@@ -19,11 +18,7 @@ module.exports = (function() {
                 ) {
                     const value = req.query[action];
                     global.action[action] = value;
-                    fs.writeFile(
-                        path.join(global.mainDir, 'action.json'),
-                        JSON.stringify(global.action, null, '\t'),
-                        (err) => err && console.error(err)
-                    );
+                    global.update.action();
                     content += `<h1>${action} set to ${value}</h1>`;
                 } else {
                     content += `<h1>${action} not found</h1>`;

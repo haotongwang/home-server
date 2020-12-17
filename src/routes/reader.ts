@@ -3,7 +3,6 @@
 import express from 'express';
 import fs from 'fs';
 import { JSDOM } from 'jsdom';
-import path from 'path';
 import htmlGen from '../lib/htmlGen';
 // eslint-disable-next-line new-cap
 const router = express.Router();
@@ -11,28 +10,18 @@ const router = express.Router();
 module.exports = (function() {
     router.get('/reader/replace', (req, res) => {
         let result = '';
-        for (const q in req.query) {
-            if (req.query.hasOwnProperty(q)) {
-                global.action.reader.replace[q] = req.query[q] as string;
-                result += `${q} replaced with ${req.query[q]}<br>`;
-            }
-        }
-        fs.writeFile(
-            path.join(global.mainDir, 'action.json'),
-            JSON.stringify(global.action, null, '\t'),
-            (err) => err && console.error(err)
-        );
+        Object.entries(req.query).forEach(([q, v]) => {
+            global.action.reader.replace[q] = v as string;
+            result += `${q} replaced with ${v}<br>`;
+        });
+        global.update.action();
         res.send(htmlGen.wrap(result));
     });
 
     router.get('/reader/clear', (req, res) => {
         global.action.reader.replace = {};
         global.action.reader.url = '';
-        fs.writeFile(
-            path.join(global.mainDir, 'action.json'),
-            JSON.stringify(global.action, null, '\t'),
-            (err) => err && console.error(err)
-        );
+        global.update.action();
         res.send(htmlGen.wrap("Reader cleared"));
     });
 
@@ -46,11 +35,7 @@ module.exports = (function() {
         if (req.query['url']) {
             // set new last url
             global.action.reader.url = req.query['url'] as string;
-            fs.writeFile(
-                path.join(global.mainDir, 'action.json'),
-                JSON.stringify(global.action, null, '\t'),
-                (err) => err && console.error(err)
-            );
+            global.update.action();
             res.redirect('/reader');
             return;
         }
