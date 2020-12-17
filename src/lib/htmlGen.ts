@@ -20,7 +20,7 @@ export default (function() {
         // Head
         document.title = title;
         const icon = document.createElement('link');
-        icon.href = "favicon/favicon.ico";
+        icon.href = "/favicon/favicon.ico";
         icon.rel = "shortcut icon";
         document.head.appendChild(icon);
 
