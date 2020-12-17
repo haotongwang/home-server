@@ -118,7 +118,10 @@ app.get('*', (req, res, next) => {
 // Styles
 app.use('/styles', express.static(path.join(global.mainDir, 'styles')));
 
-// static files
+// Icons
+app.use('/favicon', express.static(path.join(global.mainDir, 'favicon')));
+
+// Static files
 app.use(express.static(global.serveDirectory));
 
 // 404

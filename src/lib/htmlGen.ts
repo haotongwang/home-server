@@ -16,15 +16,22 @@ export default (function() {
         title = title || path.basename(dirPath);
 
         const { document } = new JSDOM().window;
-        document.title = title;
 
+        // Head
+        document.title = title;
+        const icon = document.createElement('link');
+        icon.href = "favicon/favicon.ico";
+        icon.rel = "shortcut icon";
+        document.head.appendChild(icon);
+
+        // Title
         const h1 = document.createElement('h1');
         h1.innerHTML = title;
         document.body.appendChild(h1);
 
+        // Directories and files
         const ul = document.createElement('ul');
         document.body.appendChild(ul);
-
         fs.readdirSync(dirPath).forEach((d) => {
             const li = document.createElement('li');
             const urlServe = dirPath.replace(global.serveDirectory, '');
@@ -32,6 +39,7 @@ export default (function() {
             ul.appendChild(li);
         });
 
+        // Upload
         const div = document.createElement('div');
         div.innerHTML = `<form action="/upload"enctype="multipart/form-data"method="POST"><input type="file"name="upload"multiple="multiple"oninput="if(this.value)submit.disabled=false;else submit.disabled=true;"><input type="submit"value="Upload"id="submit"></form>`;
         document.body.appendChild(div);
