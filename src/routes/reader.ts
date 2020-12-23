@@ -72,9 +72,9 @@ module.exports = (function() {
 
                 // Add parts
                 document.querySelector<HTMLAnchorElement>('#next_chap').href
-                    += `${next.href.startsWith('https://') ? '' : url.origin}${next.href}`;
+                    += `${next?.href.startsWith('https://') ? '' : url.origin}${next?.href}`;
                 document.querySelector<HTMLAnchorElement>('#prev_chap').href
-                    += `${prev.href.startsWith('https://') ? '' : url.origin}${prev.href}`;
+                    += `${prev?.href.startsWith('https://') ? '' : url.origin}${prev?.href}`;
                 const c = document.querySelector('#chapter-content');
                 c.parentNode.replaceChild(content, c);
 
