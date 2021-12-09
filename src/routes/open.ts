@@ -13,7 +13,7 @@ module.exports = (function() {
             const url = messages[i];
             script += `window.open('${url}');`;
         }
-        script += `window.location.replace('${messages[0]}')`;
+        script += `window.location.replace('${messages[0]}');`;
         script += `</script>`;
         res.send(htmlGen.wrap(script));
     });

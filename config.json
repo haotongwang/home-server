@@ -5,7 +5,7 @@
 		"PORT_dev": 5000
 	},
 	"reader": {
-		"whitelist": ["p", "h1", "h2", "h3", "h4", "h5", "h6", "div"],
+		"whitelist": ["p", "h1", "h2", "h3", "h4", "h5", "h6", "div", "br", "hr"],
 		"targets": {
 			"novelfull.com": {
 				"title": "a.truyen-title",
@@ -15,7 +15,7 @@
 			},
 			"www.readlightnovel.org": {
 				"title": "div.block-title > h1 > a",
-				"content": "div.chapter-content3 > div.desc",
+				"content": "#growfoodsmart",
 				"next": ".next.next-link",
 				"prev": ".prev.prev-link"
 			},
