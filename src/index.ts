@@ -61,7 +61,7 @@ const args = yargs
         console.log(`Invalid path: ${args.d}, serve directory set to ${def.serveDirectory}`);
         global.serveDirectory = def.serveDirectory;
     }
-    global.serveDirectory = global.serveDirectory.replace(/\/|\\/g, '\\');
+    global.serveDirectory = global.serveDirectory.replace(/\/|\\/g, path.sep);
 
     // Port
     global.PORT = args.p >= 0

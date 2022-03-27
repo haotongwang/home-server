@@ -1,30 +1,36 @@
 {
-	"default": {
-		"serveDirectory": "C:/Users/whako/Desktop/local",
-		"PORT_run": 443,
-		"PORT_dev": 5000
-	},
-	"reader": {
-		"whitelist": ["p", "h1", "h2", "h3", "h4", "h5", "h6", "div", "br", "hr"],
-		"targets": {
-			"novelfull.com": {
-				"title": "a.truyen-title",
-				"content": "#chapter-content",
-				"next": "#next_chap",
-				"prev": "#prev_chap"
-			},
-			"www.readlightnovel.org": {
-				"title": "div.block-title > h1 > a",
-				"content": "#growfoodsmart",
-				"next": ".next.next-link",
-				"prev": ".prev.prev-link"
-			},
-			"wuxiaworld.com": {
-				"title": "div.top-bar-area > ul > li.caption > a",
-				"content": "#chapter-content",
-				"next": "div.top-bar-area > ul > li.next > a",
-				"prev": "div.top-bar-area > ul > li.prev > a"
-			}
-		}
-	}
+  "default": {
+    "serveDirectory": "C:/Users/whako/Desktop/local",
+    "PORT_run": 443,
+    "PORT_dev": 5000
+  },
+  "reader": {
+    "whitelist": ["p", "h1", "h2", "h3", "h4", "h5", "h6", "div", "br", "hr"],
+    "targets": {
+      "novelfull.com": {
+        "title": "a.truyen-title",
+        "content": "#chapter-content",
+        "next": "#next_chap",
+        "prev": "#prev_chap"
+      },
+      "readlightnovels.net": {
+        "title": "a.truyen-title",
+        "content": ".chapter-content",
+        "next": "#next_chap",
+        "prev": "#prev_chap"
+      },
+      "www.readlightnovel.org": {
+        "title": "div.block-title > h1 > a",
+        "content": "#growfoodsmart",
+        "next": ".next.next-link",
+        "prev": ".prev.prev-link"
+      },
+      "wuxiaworld.com": {
+        "title": "div.top-bar-area > ul > li.caption > a",
+        "content": "#chapter-content",
+        "next": "div.top-bar-area > ul > li.next > a",
+        "prev": "div.top-bar-area > ul > li.prev > a"
+      }
+    }
+  }
 }
