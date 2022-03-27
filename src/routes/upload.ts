@@ -1,7 +1,7 @@
 "use strict";
 
 import express from 'express';
-import { Formidable } from 'formidable';
+import formidable from 'formidable';
 import fs from 'fs';
 import path from 'path';
 // eslint-disable-next-line new-cap
@@ -9,7 +9,7 @@ const router = express.Router();
 
 module.exports = (function() {
     router.post('/upload', (req, res) => {
-        const form = new Formidable({ keepExtensions: true, multiples: true });
+        const form = formidable({ keepExtensions: true, multiples: true });
 
         form.parse(req, (err, fields, files) => {
             if (err) {

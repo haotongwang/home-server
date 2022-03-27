@@ -1,7 +1,7 @@
 "use strict";
 
 import express from 'express';
-import { Formidable } from 'formidable';
+import formidable from 'formidable';
 import path from 'path';
 import htmlGen from '../lib/htmlGen';
 // eslint-disable-next-line new-cap
@@ -34,7 +34,7 @@ module.exports = (function() {
         })
         .post((req, res) => {
             const { action } = req.params;
-            const form = new Formidable({ keepExtensions: true, multiples: true });
+            const form = formidable({ keepExtensions: true, multiples: true });
 
             form.parse(req, (err, fields) => {
                 res.redirect(`/set?${action}=${fields.value}`);
